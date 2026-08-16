@@ -221,6 +221,85 @@ class GradeTracker:
             print(f"\nAssignment {number}")
             assignment.display()
 
+              # Show grade summary
+    def show_summary(self):
+
+        print("\n--- Grade Summary ---")
+
+        # Check if there are no assignments
+        if not self.assignments:
+            print("No assignments available.")
+            return
+
+        # Calculate the overall average
+        total_percentage = 0
+
+        for assignment in self.assignments:
+            total_percentage += assignment.percentage()
+
+        overall_average = (
+            total_percentage / len(self.assignments)
+        )
+
+        print(
+            f"Overall average: "
+            f"{overall_average:.2f}%"
+        )
+
+        # Create a dictionary to store scores by subject
+        subjects = {}
+
+        for assignment in self.assignments:
+
+            subject = assignment.subject
+
+            if subject not in subjects:
+                subjects[subject] = []
+
+            subjects[subject].append(
+                assignment.percentage()
+            )
+
+        # Display the average for each subject
+        print("\nPer-subject averages:")
+
+        for subject, scores in subjects.items():
+
+            average = sum(scores) / len(scores)
+
+            print(
+                f"{subject.title()}: "
+                f"{average:.2f}%"
+            )
+
+        # Find the highest scoring assignment
+        highest = max(
+            self.assignments,
+            key=lambda assignment:
+            assignment.percentage()
+        )
+
+        # Find the lowest scoring assignment
+        lowest = min(
+            self.assignments,
+            key=lambda assignment:
+            assignment.percentage()
+        )
+
+        print("\nHighest scoring assignment:")
+
+        print(
+            f"{highest.title} - "
+            f"{highest.percentage():.2f}%"
+        )
+
+        print("\nLowest scoring assignment:")
+
+        print(
+            f"{lowest.title} - "
+            f"{lowest.percentage():.2f}%"
+        )
+
 
 # Main program
 def main():
@@ -238,6 +317,7 @@ def main():
         print("2) Add exam")
         print("3) List assignments")
         print("4) Filter assignments")
+        print("5) Show summary")
         print("0) Exit")
 
         # Get the user's choice
@@ -258,6 +338,11 @@ def main():
         # Filter assignments
         elif choice == "4":
             tracker.filter_assignments()
+            
+
+        # Show grade summary
+        elif choice == "5":
+            tracker.show_summary()
 
         # Exit the program
         elif choice == "0":
