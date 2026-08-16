@@ -1,8 +1,15 @@
 
+
+
+
+# ASSIGNMENT PARENT CLASS
+
+
 # Parent class for all assignments
 class Assignment:
 
     def __init__(self, subject, title, score, max_score, due_date, atype):
+
         # Store the subject
         self.subject = subject.lower().strip()
 
@@ -25,6 +32,7 @@ class Assignment:
 
     # Display assignment information
     def display(self):
+
         print(f"Subject: {self.subject.title()}")
         print(f"Title: {self.title}")
         print(f"Score: {self.score:g}/{self.max_score:g}")
@@ -33,10 +41,16 @@ class Assignment:
         print(f"Type: {self.type.title()}")
         print("-" * 45)
 
-        # Homework inherits from Assignment
+
+
+# HOMEWORK SUBCLASS
+
+
+# Homework inherits from Assignment
 class Homework(Assignment):
 
     def __init__(self, subject, title, score, max_score, due_date):
+
         super().__init__(
             subject,
             title,
@@ -47,10 +61,15 @@ class Homework(Assignment):
         )
 
 
+
+# EXAM SUBCLASS
+
+
 # Exam inherits from Assignment
 class Exam(Assignment):
 
     def __init__(self, subject, title, score, max_score, due_date):
+
         super().__init__(
             subject,
             title,
@@ -59,23 +78,163 @@ class Exam(Assignment):
             due_date,
             "exam"
         )
-        # GradeTracker manages all assignments
+
+
+
+# GRADE TRACKER CLASS
+
+
+# GradeTracker manages all assignments
 class GradeTracker:
 
     def __init__(self):
+
         # Store assignments in memory
         self.assignments = []
+
+    
+    # INPUT VALIDATION METHODS
+    
+
+    # Get text input and make sure it is not empty
+    def get_text(self, message):
+
+        while True:
+
+            value = input(message).strip()
+
+            if value:
+                return value
+
+            print("Input cannot be empty. Please try again.")
+
+    # Get a valid maximum score
+    def get_max_score(self):
+
+        while True:
+
+            try:
+
+                max_score = float(
+                    input("Maximum score: ")
+                )
+
+                # Maximum score must be greater than zero
+                if max_score <= 0:
+
+                    print(
+                        "Maximum score must be greater than zero."
+                    )
+
+                    continue
+
+                return max_score
+
+            except ValueError:
+
+                print(
+                    "Please enter a valid number."
+                )
+
+    # Get a valid score
+    def get_score(self, max_score):
+
+        while True:
+
+            try:
+
+                score = float(
+                    input("Score: ")
+                )
+
+                # Score cannot be negative
+                if score < 0:
+
+                    print(
+                        "Score cannot be negative."
+                    )
+
+                    continue
+
+                # Score cannot be greater than maximum
+                if score > max_score:
+
+                    print(
+                        "Score cannot be greater "
+                        "than maximum score."
+                    )
+
+                    continue
+
+                return score
+
+            except ValueError:
+
+                print(
+                    "Please enter a valid number."
+                )
+
+    # Get a valid date
+    def get_date(self):
+
+        while True:
+
+            date = input(
+                "Due date (YYYY-MM-DD): "
+            ).strip()
+
+            # Check basic YYYY-MM-DD format
+            if (
+                len(date) == 10
+                and date[4] == "-"
+                and date[7] == "-"
+            ):
+
+                try:
+
+                    year = int(date[0:4])
+                    month = int(date[5:7])
+                    day = int(date[8:10])
+
+                    # Check valid date ranges
+                    if (
+                        year > 0
+                        and 1 <= month <= 12
+                        and 1 <= day <= 31
+                    ):
+
+                        return date
+
+                except ValueError:
+
+                    pass
+
+            print(
+                "Invalid date. Please use YYYY-MM-DD."
+            )
+
+    # ADD HOMEWORK
+    
 
     # Add homework
     def add_homework(self):
 
         print("\n--- Add Homework ---")
 
-        subject = input("Subject: ")
-        title = input("Title: ")
-        score = float(input("Score: "))
-        max_score = float(input("Maximum score: "))
-        due_date = input("Due date (YYYY-MM-DD): ")
+        # Get valid subject
+        subject = self.get_text("Subject: ")
+
+        # Get valid title
+        title = self.get_text("Title: ")
+
+        # Get valid maximum score
+        max_score = self.get_max_score()
+
+        # Get valid score
+        score = self.get_score(max_score)
+
+        # Get valid due date
+        due_date = self.get_date()
 
         # Create a Homework object
         homework = Homework(
@@ -91,16 +250,29 @@ class GradeTracker:
 
         print("Homework added successfully!")
 
+    
+    # ADD EXAM
+    
+
     # Add exam
     def add_exam(self):
 
         print("\n--- Add Exam ---")
 
-        subject = input("Subject: ")
-        title = input("Title: ")
-        score = float(input("Score: "))
-        max_score = float(input("Maximum score: "))
-        due_date = input("Due date (YYYY-MM-DD): ")
+        # Get valid subject
+        subject = self.get_text("Subject: ")
+
+        # Get valid title
+        title = self.get_text("Title: ")
+
+        # Get valid maximum score
+        max_score = self.get_max_score()
+
+        # Get valid score
+        score = self.get_score(max_score)
+
+        # Get valid due date
+        due_date = self.get_date()
 
         # Create an Exam object
         exam = Exam(
@@ -116,13 +288,17 @@ class GradeTracker:
 
         print("Exam added successfully!")
 
-          # List all assignments
+    
+    # LIST ASSIGNMENTs
+
+    # List all assignments
     def list_assignments(self):
 
         print("\n--- All Assignments ---")
 
         # Check if there are no assignments
         if not self.assignments:
+
             print("No assignments available.")
             return
 
@@ -131,17 +307,21 @@ class GradeTracker:
             self.assignments,
             start=1
         ):
+
             print(f"\nAssignment {number}")
 
             # Use the display method from Assignment
             assignment.display()
 
+    
+    # FILTER ASSIGNMENTS
 
-               # Filter assignments
+    # Filter assignments
     def filter_assignments(self):
 
         # Check if there are no assignments
         if not self.assignments:
+
             print("\nNo assignments available.")
             return
 
@@ -157,7 +337,10 @@ class GradeTracker:
         # Store matching assignments
         results = []
 
+        
         # Filter by subject
+        
+
         if choice == "1":
 
             subject = input(
@@ -167,9 +350,13 @@ class GradeTracker:
             for assignment in self.assignments:
 
                 if assignment.subject == subject:
+
                     results.append(assignment)
 
-        # Filter by homework or exam
+        
+        # Filter by type
+        
+
         elif choice == "2":
 
             atype = input(
@@ -177,37 +364,88 @@ class GradeTracker:
             ).lower().strip()
 
             if atype not in ["homework", "exam"]:
+
                 print("Invalid type.")
                 return
 
             for assignment in self.assignments:
 
                 if assignment.type == atype:
+
                     results.append(assignment)
 
+    
         # Filter by month
+    
+
         elif choice == "3":
 
             month = input(
                 "Enter month (YYYY-MM): "
             ).strip()
 
+            # Check basic month format
+            if (
+                len(month) != 7
+                or month[4] != "-"
+            ):
+
+                print(
+                    "Invalid month format. "
+                    "Please use YYYY-MM."
+                )
+
+                return
+
+            try:
+
+                year = int(month[0:4])
+                month_number = int(month[5:7])
+
+                if year <= 0 or not 1 <= month_number <= 12:
+
+                    print(
+                        "Invalid month. "
+                        "Please use a valid YYYY-MM."
+                    )
+
+                    return
+
+            except ValueError:
+
+                print(
+                    "Invalid month. "
+                    "Please use YYYY-MM."
+                )
+
+                return
+
             for assignment in self.assignments:
 
                 if assignment.due_date.startswith(month):
+
                     results.append(assignment)
 
-        # Return to the main menu
+        
+        # Return to main menu
+
+
         elif choice == "0":
+
             return
 
+    
         # Invalid filter choice
+        
+
         else:
+
             print("Invalid filter choice.")
             return
 
         # Check whether anything matched
         if not results:
+
             print("\nNo matching assignments found.")
             return
 
@@ -218,23 +456,34 @@ class GradeTracker:
             results,
             start=1
         ):
+
             print(f"\nAssignment {number}")
+
             assignment.display()
 
-              # Show grade summary
+    
+    # GRADE SUMMARY
+    
+
+    # Show grade summary
     def show_summary(self):
 
         print("\n--- Grade Summary ---")
 
         # Check if there are no assignments
         if not self.assignments:
+
             print("No assignments available.")
             return
 
-        # Calculate the overall average
+        
+        # Calculate overall average
+        
+
         total_percentage = 0
 
         for assignment in self.assignments:
+
             total_percentage += assignment.percentage()
 
         overall_average = (
@@ -246,7 +495,11 @@ class GradeTracker:
             f"{overall_average:.2f}%"
         )
 
-        # Create a dictionary to store scores by subject
+        
+        # Calculate per-subject averages
+        
+
+        # Dictionary for subject scores
         subjects = {}
 
         for assignment in self.assignments:
@@ -254,13 +507,13 @@ class GradeTracker:
             subject = assignment.subject
 
             if subject not in subjects:
+
                 subjects[subject] = []
 
             subjects[subject].append(
                 assignment.percentage()
             )
 
-        # Display the average for each subject
         print("\nPer-subject averages:")
 
         for subject, scores in subjects.items():
@@ -272,14 +525,20 @@ class GradeTracker:
                 f"{average:.2f}%"
             )
 
-        # Find the highest scoring assignment
+
+        # Find highest scoring assignment
+    
+
         highest = max(
             self.assignments,
             key=lambda assignment:
             assignment.percentage()
         )
 
-        # Find the lowest scoring assignment
+        
+        # Find lowest scoring assignment
+        
+
         lowest = min(
             self.assignments,
             key=lambda assignment:
@@ -301,7 +560,10 @@ class GradeTracker:
         )
 
 
-# Main program
+
+# MAIN PROGRAM
+
+
 def main():
 
     # Create the GradeTracker
@@ -321,40 +583,49 @@ def main():
         print("0) Exit")
 
         # Get the user's choice
-        choice = input("Choose an option: ")
+        choice = input("Choose an option: ").strip()
 
         # Add homework
         if choice == "1":
+
             tracker.add_homework()
 
         # Add exam
         elif choice == "2":
+
             tracker.add_exam()
 
         # List assignments
         elif choice == "3":
+
             tracker.list_assignments()
 
         # Filter assignments
         elif choice == "4":
+
             tracker.filter_assignments()
-            
 
         # Show grade summary
         elif choice == "5":
+
             tracker.show_summary()
 
         # Exit the program
         elif choice == "0":
+
             print("Goodbye!")
             break
 
         # Handle invalid choices
         else:
-            print("Invalid choice. Please try again.")
 
+            print(
+                "Invalid menu choice. "
+                "Please choose 0, 1, 2, 3, 4, or 5."
+            )
 
-# Start the program
+# START THE PROGRAM
+#
+
 if __name__ == "__main__":
     main()
-        
