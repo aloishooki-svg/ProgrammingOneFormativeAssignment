@@ -32,3 +32,30 @@ class Assignment:
         print(f"Due Date: {self.due_date}")
         print(f"Type: {self.type.title()}")
         print("-" * 45)
+
+        # Homework inherits from Assignment
+class Homework(Assignment):
+
+    def __init__(self, subject, title, score, max_score, due_date):
+        super().__init__(
+            subject,
+            title,
+            score,
+            max_score,
+            due_date,
+            "homework"
+        )
+
+
+# Exam inherits from Assignment
+class Exam(Assignment):
+
+    def __init__(self, subject, title, score, max_score, due_date):
+        super().__init__(
+            subject,
+            title,
+            score,
+            max_score,
+            due_date,
+            "exam"
+        )
