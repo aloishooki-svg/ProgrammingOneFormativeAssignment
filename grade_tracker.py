@@ -137,6 +137,91 @@ class GradeTracker:
             assignment.display()
 
 
+               # Filter assignments
+    def filter_assignments(self):
+
+        # Check if there are no assignments
+        if not self.assignments:
+            print("\nNo assignments available.")
+            return
+
+        print("\n--- Filter Assignments ---")
+        print("1) By subject")
+        print("2) By type")
+        print("3) By month")
+        print("0) Back")
+
+        # Get filter choice
+        choice = input("Choose a filter: ").strip()
+
+        # Store matching assignments
+        results = []
+
+        # Filter by subject
+        if choice == "1":
+
+            subject = input(
+                "Enter subject: "
+            ).lower().strip()
+
+            for assignment in self.assignments:
+
+                if assignment.subject == subject:
+                    results.append(assignment)
+
+        # Filter by homework or exam
+        elif choice == "2":
+
+            atype = input(
+                "Enter type (homework/exam): "
+            ).lower().strip()
+
+            if atype not in ["homework", "exam"]:
+                print("Invalid type.")
+                return
+
+            for assignment in self.assignments:
+
+                if assignment.type == atype:
+                    results.append(assignment)
+
+        # Filter by month
+        elif choice == "3":
+
+            month = input(
+                "Enter month (YYYY-MM): "
+            ).strip()
+
+            for assignment in self.assignments:
+
+                if assignment.due_date.startswith(month):
+                    results.append(assignment)
+
+        # Return to the main menu
+        elif choice == "0":
+            return
+
+        # Invalid filter choice
+        else:
+            print("Invalid filter choice.")
+            return
+
+        # Check whether anything matched
+        if not results:
+            print("\nNo matching assignments found.")
+            return
+
+        # Display matching assignments
+        print("\n--- Filter Results ---")
+
+        for number, assignment in enumerate(
+            results,
+            start=1
+        ):
+            print(f"\nAssignment {number}")
+            assignment.display()
+
+
 # Main program
 def main():
 
@@ -151,6 +236,8 @@ def main():
         print("========================================")
         print("1) Add homework")
         print("2) Add exam")
+        print("3) List assignments")
+        print("4) Filter assignments")
         print("0) Exit")
 
         # Get the user's choice
@@ -163,6 +250,14 @@ def main():
         # Add exam
         elif choice == "2":
             tracker.add_exam()
+
+        # List assignments
+        elif choice == "3":
+            tracker.list_assignments()
+
+        # Filter assignments
+        elif choice == "4":
+            tracker.filter_assignments()
 
         # Exit the program
         elif choice == "0":
