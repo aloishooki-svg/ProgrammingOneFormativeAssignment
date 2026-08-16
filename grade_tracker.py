@@ -116,6 +116,26 @@ class GradeTracker:
 
         print("Exam added successfully!")
 
+          # List all assignments
+    def list_assignments(self):
+
+        print("\n--- All Assignments ---")
+
+        # Check if there are no assignments
+        if not self.assignments:
+            print("No assignments available.")
+            return
+
+        # Display each assignment
+        for number, assignment in enumerate(
+            self.assignments,
+            start=1
+        ):
+            print(f"\nAssignment {number}")
+
+            # Use the display method from Assignment
+            assignment.display()
+
 
 # Main program
 def main():
